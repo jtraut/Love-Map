@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Our Love Map — Gottman Exercises</title>
+<style>
+
+:root {
+  --bg: #fdf8ff;
+  --panel: #ffffff;
+  --border: #e4d4f4;
+  --text: #3a2d4e;
+  --text-soft: #8a7a9e;
+  --hover: #f7f0ff;
+
+  /* Pastel palette */
+  --blue:        #b8d8f0;
+  --blue-soft:   #eef6ff;
+  --blue-mid:    #7ab8e0;
+  --blue-dark:   #3a78a8;
+  --blue-deep:   #1e5a80;
+
+  --pink:        #f0c0d4;
+  --pink-soft:   #fff0f6;
+  --pink-mid:    #e890b0;
+  --pink-dark:   #b85080;
+  --pink-deep:   #8a2a5a;
+
+  --green:       #b4e0c0;
+  --green-soft:  #f0fff6;
+  --green-mid:   #78c898;
+  --green-dark:  #3a8a5a;
+  --green-deep:  #1e6040;
+
+  --purple:      #d0b8e8;
+  --purple-soft: #f8f0ff;
+  --purple-mid:  #b088d0;
+  --purple-dark: #7848a8;
+  --purple-deep: #4a2880;
+
+  --tab-bar-bg: #ffffff;
+  --tab-inactive: #9a8aae;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 1rem; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* ===== TOP TAB BAR ===== */
+.tabs-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--tab-bar-bg);
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 1.25rem;
+  box-shadow: 0 2px 8px rgba(180,140,220,0.10);
+  flex-wrap: wrap;
+  gap: 0;
+}
+.tabs-bar .brand {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--purple-dark);
+  padding: 0.85rem 1.25rem 0.85rem 0;
+  margin-right: 1rem;
+  border-right: 1px solid var(--border);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.tabs-bar .brand span { font-size: 18px; margin-right: 0.3rem; }
+.tabs-bar nav { display: flex; gap: 0; flex-wrap: wrap; }
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 0.85rem 1.1rem;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--tab-inactive);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text); background: var(--hover); }
+
+/* Per-tab active colors */
+.tab-btn[data-tab="questionnaire"].active { color: var(--pink-dark); border-bottom-color: var(--pink-mid); font-weight: 700; }
+.tab-btn[data-tab="exercise1"].active     { color: var(--blue-dark);   border-bottom-color: var(--blue-mid);   font-weight: 700; }
+.tab-btn[data-tab="exercise2"].active     { color: var(--green-dark);  border-bottom-color: var(--green-mid);  font-weight: 700; }
+.tab-btn[data-tab="exercise3"].active     { color: var(--purple-dark); border-bottom-color: var(--purple-mid); font-weight: 700; }
+
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 0.45rem;
+  background: var(--purple-soft);
+  color: var(--purple-dark);
+}
+.tab-btn[data-tab="questionnaire"] .tab-badge { background: var(--pink-soft);   color: var(--pink-dark);   }
+.tab-btn[data-tab="exercise1"]     .tab-badge { background: var(--blue-soft);   color: var(--blue-dark);   }
+.tab-btn[data-tab="exercise2"]     .tab-badge { background: var(--green-soft);  color: var(--green-dark);  }
+.tab-btn[data-tab="exercise3"]     .tab-badge { background: var(--purple-soft); color: var(--purple-dark); }
+
+.tab-btn[data-tab="questionnaire"].active .tab-badge { background: var(--pink-mid);   color: #fff; }
+.tab-btn[data-tab="exercise1"].active     .tab-badge { background: var(--blue-mid);   color: #fff; }
+.tab-btn[data-tab="exercise2"].active     .tab-badge { background: var(--green-mid);  color: #fff; }
+.tab-btn[data-tab="exercise3"].active     .tab-badge { background: var(--purple-mid); color: #fff; }
+
+/* ===== TAB PANELS ===== */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ===== SHARED CONTENT STYLES ===== */
+.content-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 2rem 5rem;
+}
+
+.tab-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid var(--border);
+}
+.tab-header h1 {
+  margin: 0 0 0.35rem;
+  font-size: 26px;
+  font-weight: 700;
+}
+.tab-header .subtitle {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-soft);
+}
+.tab-header .meta {
+  margin-top: 0.4rem;
+  font-size: 13px;
+  color: var(--text-soft);
+  font-style: italic;
+}
+
+/* Color theming per tab */
+#panel-questionnaire .tab-header h1 { color: var(--pink-deep); }
+#panel-questionnaire .tab-header     { border-bottom-color: var(--pink); }
+#panel-exercise1    .tab-header h1  { color: var(--blue-deep);   }
+#panel-exercise1    .tab-header      { border-bottom-color: var(--blue); }
+#panel-exercise2    .tab-header h1  { color: var(--green-deep);  }
+#panel-exercise2    .tab-header      { border-bottom-color: var(--green); }
+#panel-exercise3    .tab-header h1  { color: var(--purple-deep); }
+#panel-exercise3    .tab-header      { border-bottom-color: var(--purple); }
+
+/* ===== INSTRUCTION BLOCK ===== */
+.instruction-block {
+  border-radius: 12px;
+  padding: 1.1rem 1.35rem;
+  margin-bottom: 1.75rem;
+  font-size: 14.5px;
+  border-left: 4px solid;
+}
+.instruction-block p { margin: 0.4rem 0; }
+.instruction-block p:first-child { margin-top: 0; }
+.instruction-block p:last-child  { margin-bottom: 0; }
+.instruction-block .instr-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+#panel-questionnaire .instruction-block { background: var(--pink-soft); border-color: var(--pink-mid); color: var(--pink-deep); }
+#panel-exercise1     .instruction-block { background: var(--blue-soft); border-color: var(--blue-mid); color: var(--blue-deep); }
+#panel-exercise2     .instruction-block { background: var(--green-soft); border-color: var(--green-mid); color: var(--green-deep); }
+#panel-exercise3     .instruction-block { background: var(--purple-soft); border-color: var(--purple-mid); color: var(--purple-deep); }
+
+/* ===== QUESTION CARD ===== */
+.q-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem 1.2rem;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: box-shadow 0.15s;
+}
+.q-card:hover { box-shadow: 0 2px 10px rgba(160,120,200,0.10); }
+
+.q-num {
+  min-width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+#panel-questionnaire .q-num { background: var(--pink-soft); color: var(--pink-dark); }
+#panel-exercise2     .q-num { background: var(--green-soft); color: var(--green-dark); }
+#panel-exercise3     .q-num { background: var(--purple-soft); color: var(--purple-dark); }
+
+.q-text { flex: 1; font-size: 14.5px; color: var(--text); padding-top: 0.15rem; }
+
+/* ===== QUESTIONNAIRE: TRUE/FALSE ===== */
+.tf-controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+.tf-btn {
+  background: none;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 0.3rem 0.75rem;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  color: var(--text-soft);
+}
+.tf-btn:hover { border-color: var(--pink-mid); color: var(--pink-dark); }
+.tf-btn.selected-true  { background: var(--green-soft); border-color: var(--green-mid); color: var(--green-deep); }
+.tf-btn.selected-false { background: #fff3f3; border-color: #e0a0a0; color: #a03030; }
+
+/* ===== SCORE BOX ===== */
+.score-box {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.75rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.score-main {
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--pink-dark);
+  line-height: 1;
+}
+.score-label { font-size: 13px; color: var(--text-soft); font-weight: 500; }
+.score-divider { width: 1px; height: 48px; background: var(--border); }
+.score-tier {
+  flex: 1;
+  min-width: 160px;
+}
+.score-tier .tier-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--green-dark);
+  margin-bottom: 0.2rem;
+}
+.score-tier.tier-below .tier-title { color: #b05050; }
+.score-tier p { margin: 0; font-size: 13.5px; color: var(--text-soft); line-height: 1.5; }
+
+/* ===== EXERCISE 1 ===== */
+.ex1-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.btn-primary {
+  background: var(--blue-mid);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 1.4rem;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, transform 0.1s;
+  letter-spacing: 0.01em;
+}
+.btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); }
+.btn-secondary {
+  background: var(--blue-soft);
+  color: var(--blue-dark);
+  border: 2px solid var(--blue-mid);
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.btn-secondary:hover { background: var(--blue); color: white; border-color: var(--blue-dark); }
+.btn-pink {
+  background: var(--pink-soft);
+  color: var(--pink-dark);
+  border: 2px solid var(--pink-mid);
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.btn-pink:hover { background: var(--pink); color: white; border-color: var(--pink-dark); }
+
+.ex1-meta {
+  font-size: 13px;
+  color: var(--text-soft);
+  background: var(--blue-soft);
+  border-radius: 8px;
+  padding: 0.4rem 0.85rem;
+}
+
+/* Exercise 1 question cards */
+.ex1-q-card {
+  background: var(--panel);
+  border: 1px solid var(--blue);
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: box-shadow 0.15s;
+}
+.ex1-q-card:hover { box-shadow: 0 2px 10px rgba(100,160,220,0.13); }
+
+.ex1-q-num {
+  min-width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: var(--blue-soft);
+  color: var(--blue-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.ex1-q-text { flex: 1; font-size: 14.5px; }
+.ex1-q-points {
+  background: var(--blue);
+  color: var(--blue-deep);
+  border-radius: 20px;
+  padding: 0.2rem 0.7rem;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Scorekeeping */
+.scoreboard {
+  background: var(--panel);
+  border: 2px solid var(--blue);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.scoreboard h3 {
+  margin: 0 0 1rem;
+  font-size: 16px;
+  color: var(--blue-deep);
+}
+.players-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.player-col {
+  flex: 1;
+  min-width: 180px;
+}
+.player-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-soft);
+  margin-bottom: 0.35rem;
+}
+.player-name-input {
+  width: 100%;
+  padding: 0.4rem 0.7rem;
+  font-size: 14px;
+  border: 2px solid var(--blue);
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--blue-soft);
+  margin-bottom: 0.5rem;
+}
+.player-name-input:focus { border-color: var(--blue-dark); }
+.score-display {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--blue-dark);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+.score-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.score-btn {
+  background: var(--blue-soft);
+  border: 1px solid var(--blue-mid);
+  border-radius: 7px;
+  padding: 0.3rem 0.7rem;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--blue-dark);
+  transition: all 0.12s;
+}
+.score-btn:hover { background: var(--blue); color: white; }
+.score-btn.minus { border-color: #e0b0b0; color: #b05050; background: #fff5f5; }
+.score-btn.minus:hover { background: #e0a0a0; color: white; }
+.score-btn.reset { border-color: var(--border); color: var(--text-soft); }
+.score-btn.reset:hover { background: var(--hover); }
+
+.winner-banner {
+  display: none;
+  background: linear-gradient(135deg, var(--blue-soft), var(--pink-soft));
+  border: 2px solid var(--purple);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--purple-dark);
+  margin-top: 0.75rem;
+}
+.winner-banner.visible { display: block; }
+
+/* ===== EXERCISE 2 ===== */
+.ex2-q-card {
+  background: var(--panel);
+  border: 1px solid var(--green);
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 0.7rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  transition: box-shadow 0.15s;
+}
+.ex2-q-card:hover { box-shadow: 0 2px 10px rgba(100,200,140,0.13); }
+.ex2-q-num {
+  min-width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--green-soft);
+  color: var(--green-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.ex2-q-text { flex: 1; font-size: 14.5px; }
+
+/* ===== EXERCISE 3 ===== */
+.ex3-section {
+  background: var(--panel);
+  border: 1px solid var(--purple);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.ex3-section-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--purple-deep);
+  margin: 0 0 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.ex3-section-title .icon { font-size: 20px; }
+.ex3-section-intro {
+  font-size: 13.5px;
+  color: var(--text-soft);
+  margin: 0 0 1rem;
+  font-style: italic;
+}
+.ex3-prompt {
+  margin-bottom: 1rem;
+}
+.ex3-prompt .p-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--purple-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+}
+.ex3-prompt .p-text {
+  font-size: 14.5px;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.ex3-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.6rem 0.85rem;
+  font-size: 14px;
+  line-height: 1.55;
+  border: 2px solid var(--purple);
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--purple-soft);
+  resize: vertical;
+  transition: border-color 0.15s;
+}
+.ex3-textarea:focus { border-color: var(--purple-dark); background: #fff; }
+.ex3-textarea::placeholder { color: #c0a8e0; }
+
+/* ===== SECTION DIVIDERS ===== */
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+  margin: 1.75rem 0 0.75rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--text-soft);
+}
+.empty-state .es-icon { font-size: 48px; margin-bottom: 0.75rem; }
+.empty-state p { font-size: 15px; margin: 0; }
+
+/* ===== BACK TO TOP ===== */
+.back-to-top {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  background: var(--purple-mid);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(160,100,220,0.25);
+  transition: background 0.15s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.back-to-top:hover { background: var(--purple-dark); transform: translateY(-2px); }
+
+/* ===== UTILITY ===== */
+.mt-sm { margin-top: 0.5rem; }
+.mt-md { margin-top: 1rem; }
+.mt-lg { margin-top: 1.5rem; }
+.hidden { display: none !important; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .content-wrap { padding: 1.25rem 1rem 4rem; }
+  .tab-btn { padding: 0.7rem 0.7rem; font-size: 12.5px; }
+  .tabs-bar .brand { font-size: 13px; }
+  .score-display { font-size: 26px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ===== TAB BAR ===== -->
+<div class="tabs-bar">
+  <div class="brand"><span>💗</span> Our Love Map</div>
+  <nav>
+    <button class="tab-btn active" data-tab="questionnaire" onclick="switchTab('questionnaire')">
+      <span class="tab-badge">Q</span>Love Maps Questionnaire
+    </button>
+    <button class="tab-btn" data-tab="exercise1" onclick="switchTab('exercise1')">
+      <span class="tab-badge">1</span>20 Questions Game
+    </button>
+    <button class="tab-btn" data-tab="exercise2" onclick="switchTab('exercise2')">
+      <span class="tab-badge">2</span>Open-Ended Questions
+    </button>
+    <button class="tab-btn" data-tab="exercise3" onclick="switchTab('exercise3')">
+      <span class="tab-badge">3</span>Who Am I?
+    </button>
+  </nav>
+</div>
+
+
+<!-- ======================================================================
+     TAB: LOVE MAPS QUESTIONNAIRE
+     ====================================================================== -->
+<div class="tab-panel active" id="panel-questionnaire">
+  <div class="content-wrap">
+    <header class="tab-header">
+      <h1>Love Maps Questionnaire</h1>
+      <p class="subtitle">Assess the quality of your current love maps — how well you know each other's inner world.</p>
+      <p class="meta">Adapted from <em>The Seven Principles for Making Marriage Work</em> by John M. Gottman, PhD &amp; Nan Silver</p>
+    </header>
+
+    <div class="instruction-block">
+      <span class="instr-label">📖 How to use this questionnaire</span>
+      <p>By giving honest answers to the following questions, you will get a sense of the quality of your current love maps. For the most accurate reading, <strong>both of you should complete this questionnaire separately</strong>.</p>
+      <p>Read each statement and mark it <strong>True</strong> or <strong>False</strong>. Your score will update automatically below.</p>
+    </div>
+
+    <!-- Live score box -->
+    <div class="score-box" id="q-score-box">
+      <div>
+        <div class="score-main" id="q-score-num">0</div>
+        <div class="score-label">out of 20</div>
+      </div>
+      <div class="score-divider"></div>
+      <div class="score-tier" id="q-tier">
+        <div class="tier-title">Answer the questions above ↑</div>
+        <p>Your score will appear here as you respond.</p>
+      </div>
+    </div>
+
+    <div class="section-label">The 20 Questions</div>
+
+    <!-- Q1-20 true/false cards -->
+    <div id="questionnaire-cards">
+      <!-- Generated by JS -->
+    </div>
+
+    <!-- Scoring explanation -->
+    <div class="instruction-block mt-lg" style="border-color: var(--pink); background: var(--pink-soft); color: var(--pink-deep);">
+      <span class="instr-label">📊 Interpreting your score</span>
+      <p><strong>10 or higher:</strong> This is an area of strength. You have a fairly detailed map of your partner's everyday life, hopes, fears, and dreams — you know what makes them "tick." Try not to take this knowledge for granted. Keeping in touch this way ensures you'll be well equipped to handle any challenges that arise.</p>
+      <p><strong>Below 10:</strong> Your relationship could stand some improvement in this area. Perhaps you never had the time or tools to really get to know each other deeply, or your love maps have become outdated as your lives have changed. By taking the time to learn more about your partner now, you'll find your relationship grows stronger.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ======================================================================
+     TAB: EXERCISE 1 — 20 QUESTIONS GAME
+     ====================================================================== -->
+<div class="tab-panel" id="panel-exercise1">
+  <div class="content-wrap">
+    <header class="tab-header">
+      <h1>Exercise 1: The Love Map 20 Questions Game</h1>
+      <p class="subtitle">A fun, playful way to discover how well you know each other — and to learn more.</p>
+      <p class="meta">From <em>The Seven Principles for Making Marriage Work</em> — Chapter 1: Principle One</p>
+    </header>
+
+    <div class="instruction-block">
+      <span class="instr-label">📖 Instructions</span>
+      <p>Play this game together in the spirit of <strong>laughter and gentle fun</strong>. The more you play, the more you'll learn about the love maps concept and how to apply it to your own relationship.</p>
+      <p><strong>Step 1.</strong> Press <em>Generate 20 Random Questions</em> below. This picks 20 questions at random from the full list of 60.</p>
+      <p><strong>Step 2.</strong> Take turns asking each other the questions. If your partner answers correctly <em>(you be the judge!)</em>, they receive the points shown for that question — and you receive <strong>1 bonus point</strong> for asking. If they answer incorrectly, neither of you scores.</p>
+      <p><strong>Step 3.</strong> Use the scoreboard to track points. The person with the higher score after all 20 questions wins!</p>
+      <p style="font-size:13px; opacity:0.85;">💡 Play this as frequently as you'd like. Each game is a fresh set of 20 questions.</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="ex1-controls">
+      <button class="btn-primary" onclick="generateQuestions()">🎲 Generate 20 Random Questions</button>
+      <button class="btn-secondary" onclick="shuffleQuestions()">🔀 Reshuffle Same Set</button>
+      <button class="btn-pink" onclick="resetAll()">↺ Reset Game</button>
+      <span class="ex1-meta" id="ex1-counter" style="display:none"></span>
+    </div>
+
+    <!-- Scoreboard -->
+    <div class="scoreboard">
+      <h3>🏆 Scoreboard</h3>
+      <div class="players-row">
+        <div class="player-col">
+          <div class="player-label">Player 1</div>
+          <input class="player-name-input" id="p1-name" type="text" placeholder="Your name…" value="Partner 1">
+          <div class="score-display" id="p1-score">0</div>
+          <div class="score-actions">
+            <button class="score-btn" onclick="addScore(1, 1)">+1 (asked)</button>
+            <button class="score-btn" onclick="addScore(1, 2)">+2</button>
+            <button class="score-btn" onclick="addScore(1, 3)">+3</button>
+            <button class="score-btn" onclick="addScore(1, 4)">+4</button>
+            <button class="score-btn" onclick="addScore(1, 5)">+5</button>
+            <button class="score-btn minus" onclick="addScore(1, -1)">−1</button>
+            <button class="score-btn reset" onclick="resetScore(1)">Reset</button>
+          </div>
+        </div>
+        <div class="player-col">
+          <div class="player-label">Player 2</div>
+          <input class="player-name-input" id="p2-name" type="text" placeholder="Partner's name…" value="Partner 2">
+          <div class="score-display" id="p2-score">0</div>
+          <div class="score-actions">
+            <button class="score-btn" onclick="addScore(2, 1)">+1 (asked)</button>
+            <button class="score-btn" onclick="addScore(2, 2)">+2</button>
+            <button class="score-btn" onclick="addScore(2, 3)">+3</button>
+            <button class="score-btn" onclick="addScore(2, 4)">+4</button>
+            <button class="score-btn" onclick="addScore(2, 5)">+5</button>
+            <button class="score-btn minus" onclick="addScore(2, -1)">−1</button>
+            <button class="score-btn reset" onclick="resetScore(2)">Reset</button>
+          </div>
+        </div>
+      </div>
+      <div class="winner-banner" id="winner-banner">🎉 <span id="winner-text"></span></div>
+    </div>
+
+    <!-- Generated question list -->
+    <div id="ex1-empty" class="empty-state">
+      <div class="es-icon">🎲</div>
+      <p>Press <strong>Generate 20 Random Questions</strong> to begin!</p>
+    </div>
+    <div id="ex1-questions" class="hidden"></div>
+
+  </div>
+</div>
+
+
+<!-- ======================================================================
+     TAB: EXERCISE 2 — OPEN-ENDED QUESTIONS
+     ====================================================================== -->
+<div class="tab-panel" id="panel-exercise2">
+  <div class="content-wrap">
+    <header class="tab-header">
+      <h1>Exercise 2: Asking Open-Ended Questions</h1>
+      <p class="subtitle">Go deeper — update your love map with questions that invite stories, feelings, and meaning.</p>
+      <p class="meta">From <em>The Seven Principles for Making Marriage Work</em> — Chapter 1: Principle One</p>
+    </header>
+
+    <div class="instruction-block">
+      <span class="instr-label">📖 Instructions</span>
+      <p>Updating your love map is as important as the map itself. The process entails asking open-ended questions, and then <strong>remembering the answers</strong>. An open-ended question is one that can't be answered with a quick "yes" or "no" — instead, it invites your partner to offer up their experiences, opinions, and emotions. Asking one demonstrates genuine interest in your partner's inner world.</p>
+      <p><strong>Choose four</strong> to ask each other. Switch off being the speaker and the listener. After your partner answers your question, follow up with an open-ended question of your own — then answer the original question you asked your partner. Take turns.</p>
+      <p>Of course, you don't have to limit yourselves to just four. Over time, you can go through all of them — it can be entertaining and enlightening. You don't have to complete them in one sitting.</p>
+    </div>
+
+    <div class="section-label">All 30 Questions</div>
+
+    <div id="ex2-cards">
+      <!-- Generated by JS -->
+    </div>
+  </div>
+</div>
+
+
+<!-- ======================================================================
+     TAB: EXERCISE 3 — WHO AM I?
+     ====================================================================== -->
+<div class="tab-panel" id="panel-exercise3">
+  <div class="content-wrap">
+    <header class="tab-header">
+      <h1>Exercise 3: Who Am I?</h1>
+      <p class="subtitle">A deep self-exploration to share with your partner — your triumphs, wounds, emotions, and dreams.</p>
+      <p class="meta">From <em>The Seven Principles for Making Marriage Work</em> — Chapter 1: Principle One</p>
+    </header>
+
+    <div class="instruction-block">
+      <span class="instr-label">📖 Instructions</span>
+      <p>The more you know about each other's inner world, the more profound and rewarding your relationship will be. This exercise is designed both to guide you through <strong>self-exploration</strong> and to help you share that exploration with your partner. Work on this even if you consider yourselves open books — there's always more to know, and life changes us.</p>
+      <p><strong>Find time and privacy.</strong> Many of these questions are powerful. Reserve this for an uninterrupted stretch when you have no deadlines or distractions. Most likely you won't complete it in one sitting — that's okay. Break it up by section and proceed slowly, together.</p>
+      <p><strong>Answer as candidly as you can.</strong> Write your thoughts in the text areas below (or in a private journal). When you're ready, share with each other what you've written and discuss what this added knowledge means for your relationship.</p>
+    </div>
+
+    <!-- Section 1: Triumphs -->
+    <div class="ex3-section">
+      <div class="ex3-section-title"><span class="icon">🏅</span> My Triumphs &amp; Strivings</div>
+      <p class="ex3-section-intro">Reflect on your psychological triumphs — experiences where you came through trials and tribulations even better off.</p>
+
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 1</div>
+        <div class="p-text">What has happened in your life that you are particularly proud of? Write about your psychological triumphs, experiences that exceeded your expectations, periods when you came through trials and tribulations even better off.</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 2</div>
+        <div class="p-text">How have these successes shaped your life? How have they affected the way you think of yourself and your capabilities? How have they influenced your goals and the things you strive for?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 3</div>
+        <div class="p-text">What role has pride — feeling proud, being praised, expressing praise for others — played in your life? Did your parents show you they were proud of you as a child? How?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 4</div>
+        <div class="p-text">How have other people responded to your accomplishments? Did your parents show that they loved you? Was affection readily expressed in your family? If not, what are the effects of this for your relationship today?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 5</div>
+        <div class="p-text">What role does pride in your accomplishments play in your relationship? What role do your own strivings have in your relationship? What do you want your partner to know and understand about these aspects of yourself — your past, present, and plans for the future? How do you show pride in each other?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+    </div>
+
+    <!-- Section 2: Injuries -->
+    <div class="ex3-section">
+      <div class="ex3-section-title"><span class="icon">🌱</span> Injuries &amp; Healing</div>
+      <p class="ex3-section-intro">Explore the difficult experiences you've carried — and the remarkable ways you've survived and grown from them.</p>
+
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 1</div>
+        <div class="p-text">What difficult events or periods have you gone through? Write about any significant psychological injuries, losses, disappointments, trials, and tribulations — including periods of stress, hopelessness, and loneliness. Also include any deep traumas you have undergone as a child or adult.</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here… (take your time — this is a safe space)" style="min-height: 100px;"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 2</div>
+        <div class="p-text">How have you survived these traumas? What are their lasting effects on you?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 3</div>
+        <div class="p-text">How did you strengthen and heal yourself? How did you redress your grievances? How did you revive and restore yourself?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 4</div>
+        <div class="p-text">How did you protect yourself against this ever happening again?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 5</div>
+        <div class="p-text">How do these injuries — and the ways you protect and heal yourself — affect your relationship today? What do you want your partner to know and understand about these aspects of yourself?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+    </div>
+
+    <!-- Section 3: Emotional World -->
+    <div class="ex3-section">
+      <div class="ex3-section-title"><span class="icon">💜</span> My Emotional World</div>
+      <p class="ex3-section-intro">Understanding where our emotional patterns come from helps us bring more awareness to how we connect.</p>
+
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 1</div>
+        <div class="p-text">How did your family express the following emotions when you were a child? Reflect on each: <em>Anger · Sadness · Fear · Affection · Interest in one another · Pride in one another</em></div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…" style="min-height: 100px;"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 2</div>
+        <div class="p-text">During your childhood, did your family have to cope with a particular emotional challenge — such as conflict between parents, a depressed parent, or an emotionally wounded one? What implications does this have for your relationship and other close relationships today?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 3</div>
+        <div class="p-text">What is your own philosophy about expressing feelings — particularly sadness, anger, fear, pride, and love? Are any of these difficult for you to express, or to hear your partner express? What is the basis of this perspective?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 4</div>
+        <div class="p-text">What differences exist between you and your partner in the area of expressing emotion? What is behind these differences? What are the implications of these differences for your relationship?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+    </div>
+
+    <!-- Section 4: Mission & Legacy -->
+    <div class="ex3-section">
+      <div class="ex3-section-title"><span class="icon">✨</span> My Mission &amp; Legacy</div>
+      <p class="ex3-section-intro">What are you here for? What do you want to leave behind? These are among the most meaningful questions you can ask yourself.</p>
+
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 1</div>
+        <div class="p-text">Imagine you are standing in a graveyard looking at your own tombstone. Write the epitaph you would like to see there. Begin with the words: <em>"Here lies…"</em></div>
+        <textarea class="ex3-textarea" placeholder="Here lies…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 2</div>
+        <div class="p-text">Write your own obituary. (It does not have to be brief.) How do you want people to think of your life — how do you want to be remembered?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…" style="min-height: 100px;"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 3</div>
+        <div class="p-text">Write a mission statement for your own life. What is the purpose of your life? What is its meaning? What are you trying to accomplish? What is your larger struggle?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 4</div>
+        <div class="p-text">What legacy would you like to leave when you die?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 5</div>
+        <div class="p-text">What significant goals have you yet to realize? This can be creating something, having a particular experience, or any aspiration — big or small.</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+    </div>
+
+    <!-- Section 5: Who I Want to Become -->
+    <div class="ex3-section">
+      <div class="ex3-section-title"><span class="icon">🌸</span> Who I Want to Become</div>
+      <p class="ex3-section-intro">We are all involved in becoming the person we most want to be. Take a moment to reflect on that journey.</p>
+
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 1</div>
+        <div class="p-text">Describe the person you want to become.</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 2</div>
+        <div class="p-text">How can you best help yourself become that person?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 3</div>
+        <div class="p-text">What struggles have you already faced in trying to become that person?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 4</div>
+        <div class="p-text">What demons in yourself have you had to fight — or still have to fight?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 5</div>
+        <div class="p-text">What would you most like to change about yourself?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 6</div>
+        <div class="p-text">What dreams have you denied yourself or failed to develop?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 7</div>
+        <div class="p-text">What do you want your life to be like in five years?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…"></textarea>
+      </div>
+      <div class="ex3-prompt">
+        <div class="p-num">Prompt 8</div>
+        <div class="p-text">What is the story of the kind of person you would like to be?</div>
+        <textarea class="ex3-textarea" placeholder="Write your thoughts here…" style="min-height: 100px;"></textarea>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Back to top -->
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+const questionnaireQs = [
+  "I can name my partner's best friends.",
+  "I can tell you what stresses my partner is currently facing.",
+  "I know the names of some of the people who have been irritating my partner lately.",
+  "I can tell you some of my partner's life dreams.",
+  "I am very familiar with my partner's religious beliefs and ideas.",
+  "I can tell you about my partner's basic philosophy of life.",
+  "I can list the relatives my partner likes the least.",
+  "I know my partner's favorite music.",
+  "I can list my partner's three favorite movies.",
+  "My partner is familiar with my current stresses.",
+  "I know the three most special times in my partner's life.",
+  "I can tell you the most stressful thing that happened to my partner as a child.",
+  "I can list my partner's major aspirations and hopes in life.",
+  "I know my partner's major current worries.",
+  "My partner knows who my friends are.",
+  "I know what my partner would want to do if they suddenly won the lottery.",
+  "I can tell you in detail my first impressions of my partner.",
+  "Periodically I ask my partner about their world right now.",
+  "I feel that my partner knows me pretty well.",
+  "My partner is familiar with my hopes and aspirations."
+];
+
+const ex1Questions = [
+  { n:1,  text: "Name my two closest friends.",                                          pts: 2 },
+  { n:2,  text: "What is my favorite musical group, composer, or instrument?",           pts: 2 },
+  { n:3,  text: "What was I wearing when we first met?",                                 pts: 2 },
+  { n:4,  text: "Name one of my hobbies.",                                               pts: 3 },
+  { n:5,  text: "Where was I born?",                                                     pts: 1 },
+  { n:6,  text: "What stresses am I facing right now?",                                  pts: 4 },
+  { n:7,  text: "Describe in detail what I did today, or yesterday.",                    pts: 4 },
+  { n:8,  text: "When is my birthday?",                                                  pts: 1 },
+  { n:9,  text: "What is the date of our anniversary?",                                  pts: 1 },
+  { n:10, text: "Who is my favorite relative?",                                          pts: 2 },
+  { n:11, text: "What is my fondest unrealized dream?",                                  pts: 5 },
+  { n:12, text: "What is my favorite website?",                                          pts: 2 },
+  { n:13, text: "What is one of my greatest fears or disaster scenarios?",               pts: 3 },
+  { n:14, text: "What is my favorite time of day for lovemaking?",                       pts: 3 },
+  { n:15, text: "What makes me feel most competent?",                                    pts: 4 },
+  { n:16, text: "What turns me on sexually?",                                            pts: 3 },
+  { n:17, text: "What is my favorite meal?",                                             pts: 2 },
+  { n:18, text: "What is my favorite way to spend an evening?",                          pts: 2 },
+  { n:19, text: "What is my favorite color?",                                            pts: 1 },
+  { n:20, text: "What personal improvements do I want to make in my life?",              pts: 4 },
+  { n:21, text: "What kind of present would I like best?",                               pts: 2 },
+  { n:22, text: "What was one of my best childhood experiences?",                        pts: 2 },
+  { n:23, text: "What was my favorite vacation?",                                        pts: 2 },
+  { n:24, text: "What is one of my favorite ways to relax?",                             pts: 4 },
+  { n:25, text: "Who is my greatest source of support (other than you)?",               pts: 3 },
+  { n:26, text: "What is my favorite sport?",                                            pts: 2 },
+  { n:27, text: "What do I most like to do with time off?",                              pts: 2 },
+  { n:28, text: "What is one of my favorite weekend activities?",                        pts: 2 },
+  { n:29, text: "What is my dream getaway place?",                                       pts: 3 },
+  { n:30, text: "What is my favorite movie?",                                            pts: 2 },
+  { n:31, text: "What are some of the important events coming up in my life? How do I feel about them?", pts: 4 },
+  { n:32, text: "What are some of my favorite ways to work out?",                        pts: 2 },
+  { n:33, text: "Who was my best friend in childhood?",                                  pts: 3 },
+  { n:34, text: "What is one of my favorite magazines?",                                 pts: 2 },
+  { n:35, text: "Name one of my major rivals or \"enemies.\"",                           pts: 3 },
+  { n:36, text: "What would I consider my ideal job?",                                   pts: 4 },
+  { n:37, text: "What do I fear the most?",                                              pts: 4 },
+  { n:38, text: "Who is my least favorite relative?",                                    pts: 3 },
+  { n:39, text: "What is my favorite holiday?",                                          pts: 2 },
+  { n:40, text: "What kinds of books do I most like to read?",                           pts: 3 },
+  { n:41, text: "What is my favorite TV show?",                                          pts: 2 },
+  { n:42, text: "Which side of the bed do I prefer?",                                    pts: 2 },
+  { n:43, text: "What am I most sad about?",                                             pts: 4 },
+  { n:44, text: "Name one of my concerns or worries.",                                   pts: 4 },
+  { n:45, text: "What medical problems do I worry about?",                               pts: 2 },
+  { n:46, text: "What was my most embarrassing moment?",                                 pts: 3 },
+  { n:47, text: "What was my worst childhood experience?",                               pts: 3 },
+  { n:48, text: "Name two of the people I most admire.",                                 pts: 4 },
+  { n:49, text: "Name my major rival or enemy.",                                         pts: 3 },
+  { n:50, text: "Of all the people we both know, who do I like the least?",              pts: 3 },
+  { n:51, text: "What is one of my favorite desserts?",                                  pts: 2 },
+  { n:52, text: "What is my social security number?",                                    pts: 2 },
+  { n:53, text: "Name one of my favorite novels.",                                       pts: 2 },
+  { n:54, text: "What is my favorite restaurant?",                                       pts: 2 },
+  { n:55, text: "What are two of my aspirations, hopes, wishes?",                        pts: 4 },
+  { n:56, text: "Do I have a secret ambition? What is it?",                              pts: 4 },
+  { n:57, text: "What foods do I hate?",                                                 pts: 2 },
+  { n:58, text: "What is my favorite animal?",                                           pts: 2 },
+  { n:59, text: "What is my favorite song?",                                             pts: 2 },
+  { n:60, text: "Which sports team is my favorite?",                                     pts: 2 }
+];
+
+const ex2Questions = [
+  "How would you like your life to be different three years from now?",
+  "Do you see your work changing in the future? How?",
+  "What is your opinion of our physical home? Would you make changes if you could?",
+  "How do you think your life would have been different if you lived 100 years ago?",
+  "How would you compare yourself as a parent to your own parents?",
+  "What kind of person do you think our child(ren) will become? Any fears? Any hopes?",
+  "How are you feeling about your job these days?",
+  "If you could redo a five-year period of your life, which would you choose?",
+  "How are you feeling right now about being a parent?",
+  "If you could change one thing in your past, what would it be?",
+  "What is the most exciting thing happening in your life right now?",
+  "If you could instantly possess three new skills, which would you choose?",
+  "When it comes to the future, what do you worry about most?",
+  "Who do you consider your best friends or closest allies? Has that list changed recently?",
+  "What qualities do you value most highly in friends right now?",
+  "What were the best and worst things that happened to you when you were a teen?",
+  "If you could live during any other time in history, when would you choose and why?",
+  "If you could choose a different career or vocation, what would it be, and why?",
+  "What is the one thing you would most like to change about your personality? Why?",
+  "Do you feel like certain things are missing from your life? What are they?",
+  "Do you think you've changed in the last year? How so?",
+  "If you could design the perfect home for us, what would it be like?",
+  "If you could live another person's life, whose would you choose?",
+  "Have any of your life goals recently changed?",
+  "What are some of your life dreams now?",
+  "What are your goals for us as a family?",
+  "What goals do you have just for yourself right now?",
+  "If you could change one thing about yourself, what would it be?",
+  "What have been the highlights and low points of the past year for you?",
+  "What adventures would you like to have in your life right now?"
+];
+
+// ============================================================
+// QUESTIONNAIRE LOGIC
+// ============================================================
+
+let qAnswers = new Array(20).fill(null);
+
+function buildQuestionnaire() {
+  const container = document.getElementById('questionnaire-cards');
+  questionnaireQs.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.innerHTML = `
+      <div class="q-num">${i+1}</div>
+      <div class="q-text">${q}</div>
+      <div class="tf-controls">
+        <button class="tf-btn" id="q-t-${i}" onclick="setAnswer(${i}, true)">T</button>
+        <button class="tf-btn" id="q-f-${i}" onclick="setAnswer(${i}, false)">F</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function setAnswer(idx, value) {
+  qAnswers[idx] = value;
+  const tBtn = document.getElementById(`q-t-${idx}`);
+  const fBtn = document.getElementById(`q-f-${idx}`);
+  tBtn.className = 'tf-btn' + (value === true  ? ' selected-true'  : '');
+  fBtn.className = 'tf-btn' + (value === false ? ' selected-false' : '');
+  updateQScore();
+}
+
+function updateQScore() {
+  const score = qAnswers.filter(a => a === true).length;
+  document.getElementById('q-score-num').textContent = score;
+  const tier = document.getElementById('q-tier');
+  if (qAnswers.filter(a => a !== null).length === 0) {
+    tier.className = 'score-tier';
+    tier.innerHTML = '<div class="tier-title">Answer the questions above ↑</div><p>Your score will appear here as you respond.</p>';
+    return;
+  }
+  if (score >= 10) {
+    tier.className = 'score-tier';
+    tier.innerHTML = `
+      <div class="tier-title">💪 Area of Strength</div>
+      <p>You have a fairly detailed love map of your partner's everyday life, hopes, fears, and dreams. Try not to take this knowledge for granted — keep tending to it.</p>`;
+  } else {
+    tier.className = 'score-tier tier-below';
+    tier.innerHTML = `
+      <div class="tier-title">💡 Room to Grow</div>
+      <p>Your love map could use some enriching. By taking time to learn more about your partner now, you'll find your relationship grows stronger. The exercises in the other tabs are a great place to start!</p>`;
+  }
+}
+
+// ============================================================
+// EXERCISE 1 LOGIC
+// ============================================================
+
+let scores = [0, 0];
+let currentSet = [];
+
+function generateQuestions() {
+  // Pick 20 random unique indices from 0-59
+  const indices = [];
+  while (indices.length < 20) {
+    const r = Math.floor(Math.random() * 60);
+    if (!indices.includes(r)) indices.push(r);
+  }
+  currentSet = indices.map(i => ex1Questions[i]);
+  renderEx1Questions();
+}
+
+function shuffleQuestions() {
+  if (currentSet.length === 0) { generateQuestions(); return; }
+  // Shuffle the same set
+  for (let i = currentSet.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [currentSet[i], currentSet[j]] = [currentSet[j], currentSet[i]];
+  }
+  renderEx1Questions();
+}
+
+function renderEx1Questions() {
+  const el = document.getElementById('ex1-questions');
+  const empty = document.getElementById('ex1-empty');
+  const counter = document.getElementById('ex1-counter');
+
+  empty.classList.add('hidden');
+  el.classList.remove('hidden');
+
+  const totalPts = currentSet.reduce((sum, q) => sum + q.pts, 0);
+  counter.style.display = '';
+  counter.textContent = `20 questions selected · Max possible score: ${totalPts} pts`;
+
+  el.innerHTML = '';
+  currentSet.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'ex1-q-card';
+    card.innerHTML = `
+      <div class="ex1-q-num">${idx + 1}</div>
+      <div class="ex1-q-text"><strong>Q${q.n}.</strong> ${q.text}</div>
+      <div class="ex1-q-points">+${q.pts} pts</div>
+    `;
+    el.appendChild(card);
+  });
+}
+
+function addScore(player, pts) {
+  scores[player - 1] = Math.max(0, scores[player - 1] + pts);
+  document.getElementById(`p${player}-score`).textContent = scores[player - 1];
+  checkWinner();
+}
+
+function resetScore(player) {
+  scores[player - 1] = 0;
+  document.getElementById(`p${player}-score`).textContent = 0;
+  checkWinner();
+}
+
+function resetAll() {
+  scores = [0, 0];
+  document.getElementById('p1-score').textContent = 0;
+  document.getElementById('p2-score').textContent = 0;
+  currentSet = [];
+  document.getElementById('ex1-questions').classList.add('hidden');
+  document.getElementById('ex1-empty').classList.remove('hidden');
+  document.getElementById('ex1-counter').style.display = 'none';
+  document.getElementById('winner-banner').classList.remove('visible');
+}
+
+function checkWinner() {
+  const banner = document.getElementById('winner-banner');
+  const text = document.getElementById('winner-text');
+  const p1 = scores[0], p2 = scores[1];
+  const n1 = document.getElementById('p1-name').value || 'Partner 1';
+  const n2 = document.getElementById('p2-name').value || 'Partner 2';
+
+  if (p1 === 0 && p2 === 0) {
+    banner.classList.remove('visible');
+    return;
+  }
+  banner.classList.add('visible');
+  if (p1 > p2) {
+    text.textContent = `${n1} is leading with ${p1} pts vs ${p2} pts! 🌸`;
+  } else if (p2 > p1) {
+    text.textContent = `${n2} is leading with ${p2} pts vs ${p1} pts! 🌸`;
+  } else {
+    text.textContent = `It's a tie! ${p1} pts each — you both win 💕`;
+  }
+}
+
+// ============================================================
+// EXERCISE 2 LOGIC
+// ============================================================
+
+function buildEx2() {
+  const container = document.getElementById('ex2-cards');
+  ex2Questions.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'ex2-q-card';
+    card.innerHTML = `
+      <div class="ex2-q-num">${i + 1}</div>
+      <div class="ex2-q-text">${q}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+  document.getElementById(`panel-${name}`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// INIT
+// ============================================================
+buildQuestionnaire();
+buildEx2();
+</script>
+</body>
+</html>
