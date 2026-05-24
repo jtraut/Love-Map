@@ -11,11 +11,11 @@ A single-page tool for working through the Gottman **Love Maps** exercises from 
 
 ## How to use
 
-No server, no install, no account. Just open the file in any modern browser:
+No server, no install, no account. Open it one of two ways:
 
-```
-love_map.html
-```
+**Online (GitHub Pages):** [jtraut.github.io/Love-Map](https://jtraut.github.io/Love-Map/)
+
+**Locally:** download `love_map.html` and open it in any modern browser — no internet connection needed.
 
 Everything runs locally in your browser. The text you write in Exercise 3 is **not saved anywhere** — it lives only in the page for the current session. Close the tab and it's gone. If you want to keep your answers, copy them into a private document before closing.
 
