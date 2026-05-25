@@ -29,6 +29,10 @@ The exercises in this tool — especially Exercise 3 — involve personal reflec
 
 If you want to customize the questions or styling for your own relationship, fork the repo, make your changes, and keep your fork private (GitHub lets you change visibility under *Settings → Danger Zone*).
 
+## Attribution
+
+All exercises and questions are from *The Seven Principles for Making Marriage Work* by John M. Gottman, PhD & Nan Silver. This is a personal, non-commercial project created to make these exercises more accessible. Please support the authors by [purchasing the book](https://www.gottman.com/product/the-seven-principles-for-making-marriage-work/).
+
 ## Contributing
 
 Bug fixes and improvements to the questions, layout, or accessibility are welcome via pull request. Please don't submit PRs that include personal answers or relationship-specific content.
