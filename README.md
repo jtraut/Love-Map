@@ -17,7 +17,9 @@ No server, no install, no account. Open it one of two ways:
 
 **Locally:** download `love_map.html` and open it in any modern browser — no internet connection needed.
 
-Everything runs locally in your browser. The text you write in Exercise 3 is **not saved anywhere** — it lives only in the page for the current session. Close the tab and it's gone. If you want to keep your answers, copy them into a private document before closing.
+Everything runs locally in your browser. Your questionnaire answers and Exercise 3 responses are **automatically saved to your browser's localStorage** — they'll still be there if you close and reopen the tab, as long as you use the same browser on the same device.
+
+To back up your responses or move them to another device, use the **⬇ Export** button in the top bar to download a `love_map_responses_<date>.json` file. Use **⬆ Import** to restore from that file. Exported JSON files are gitignored so they won't be committed if you save them inside this project folder.
 
 ## Using this for yourself (without publishing your answers)
 

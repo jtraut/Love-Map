@@ -602,6 +602,48 @@ body {
 .site-footer a { color: var(--purple-dark); text-decoration: none; }
 .site-footer a:hover { text-decoration: underline; }
 
+/* ===== DATA CONTROLS ===== */
+.data-controls {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.25rem 0 0.75rem;
+  border-left: 1px solid var(--border);
+}
+.data-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.3rem 0.65rem;
+  font-size: 12px;
+  color: var(--text-soft);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.data-btn:hover { background: var(--hover); color: var(--text); border-color: var(--purple-mid); }
+
+/* ===== SAVE TOAST ===== */
+.save-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--green-dark);
+  color: white;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+  z-index: 200;
+}
+.save-toast.visible { opacity: 1; transform: translateY(0); }
+
 /* ===== UTILITY ===== */
 .mt-sm { margin-top: 0.5rem; }
 .mt-md { margin-top: 1rem; }
@@ -637,6 +679,10 @@ body {
       <span class="tab-badge">3</span>Who Am I?
     </button>
   </nav>
+  <div class="data-controls">
+    <button class="data-btn" onclick="exportData()" title="Download your responses as a JSON file">⬇ Export</button>
+    <label class="data-btn" title="Restore responses from a JSON export">⬆ Import<input type="file" accept=".json" style="display:none" onchange="importData(this.files[0])"></label>
+  </div>
 </div>
 
 
@@ -983,6 +1029,9 @@ body {
 <!-- Back to top -->
 <button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
+<!-- Save toast -->
+<div class="save-toast" id="save-toast">✓ Saved</div>
+
 <!-- Footer -->
 <footer class="site-footer">
   <p>All exercises and questions are from <em>The Seven Principles for Making Marriage Work</em> by John M. Gottman, PhD &amp; Nan Silver.<br>
@@ -1145,6 +1194,7 @@ function setAnswer(idx, value) {
   tBtn.className = 'tf-btn' + (value === true  ? ' selected-true'  : '');
   fBtn.className = 'tf-btn' + (value === false ? ' selected-false' : '');
   updateQScore();
+  saveData();
 }
 
 function updateQScore() {
@@ -1296,10 +1346,76 @@ function switchTab(name) {
 }
 
 // ============================================================
+// PERSISTENCE (localStorage)
+// ============================================================
+
+const STORAGE_KEY = 'lovemap_data';
+let _saveTimer = null;
+
+function saveData() {
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(() => {
+    const whoAmI = [...document.querySelectorAll('.ex3-textarea')].map(t => t.value);
+    const data = { questionnaire: qAnswers, who_am_i: whoAmI, saved_at: new Date().toISOString() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data, null, 2));
+    showSaveToast();
+  }, 400);
+}
+
+function loadData() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    if (Array.isArray(data.questionnaire)) {
+      data.questionnaire.forEach((val, i) => { if (val !== null) setAnswer(i, val); });
+    }
+    if (Array.isArray(data.who_am_i)) {
+      const areas = [...document.querySelectorAll('.ex3-textarea')];
+      data.who_am_i.forEach((val, i) => { if (areas[i]) areas[i].value = val || ''; });
+    }
+  } catch (_) {}
+}
+
+function showSaveToast() {
+  const toast = document.getElementById('save-toast');
+  toast.classList.add('visible');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toast.classList.remove('visible'), 1500);
+}
+
+function exportData() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) { alert('No saved responses yet — answer some questions first.'); return; }
+  const date = new Date().toISOString().slice(0, 10);
+  const blob = new Blob([raw], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `love_map_responses_${date}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importData(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      JSON.parse(e.target.result); // validate before storing
+      localStorage.setItem(STORAGE_KEY, e.target.result);
+      location.reload();
+    } catch (_) { alert('Could not read file — make sure it is a valid Love Map JSON export.'); }
+  };
+  reader.readAsText(file);
+}
+
+// ============================================================
 // INIT
 // ============================================================
 buildQuestionnaire();
 buildEx2();
+document.querySelectorAll('.ex3-textarea').forEach(t => t.addEventListener('input', saveData));
+loadData();
 </script>
 </body>
 </html>
